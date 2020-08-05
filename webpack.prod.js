@@ -3,6 +3,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CleanWebpackPlugin = require("clean-webpack-plugin").CleanWebpackPlugin;
 const glob = require("glob");
+const HtmlWebpackExternalsPlugin = require("html-webpack-externals-plugin");
 
 const setMPA = () => {
     const entry = {};
@@ -37,7 +38,6 @@ const setMPA = () => {
 };
 
 const { entry, htmlWebpackPlugins } = setMPA();
-
 
 module.exports = {
     entry,
@@ -100,5 +100,44 @@ module.exports = {
         }),
         ...htmlWebpackPlugins,
         new CleanWebpackPlugin(),
+        // new HtmlWebpackExternalsPlugin({
+        //     externals: [
+        //         {
+        //             module: "react",
+        //             entry:
+        //                 "https://unpkg.com/react@16/umd/react.development.js",
+        //             global: "React",
+        //         },
+        //         {
+        //             module: "react-dom",
+        //             entry:
+        //                 "https://unpkg.com/react-dom@16/umd/react-dom.development.js",
+        //             global: "ReactDOM",
+        //         },
+        //     ],
+        // }),
     ],
+    // optimization: {
+    //     splitChunks: {
+    //         cacheGroups: {
+    //             commons: {
+    //                 test: /(react|react-dom)/,
+    //                 name: "vendors",
+    //                 chunks: "all",
+    //             },
+    //         },
+    //     },
+    // },
+    optimization: {
+        splitChunks: {
+            minSize: 0,
+            cacheGroups: {
+                commons: {
+                    name: "common",
+                    chunks: "all",
+                    minChunks: 3,
+                },
+            },
+        },
+    },
 };
